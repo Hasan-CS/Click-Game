@@ -21,6 +21,7 @@ score = 0
 play = True
 font_setup = ("Arial", 20, "normal")
 
+ask = wn.textinput("Welcome to Click-Game", "Would you like to play? (y/n)")
 #-----game functions--------
 def move():
     t.stamp()
@@ -33,7 +34,7 @@ def move():
     b_color = r.choice(background_list)
     what_color = r.choice(color_list)
     what_size = r.choice(size_list)
-    
+
     wn.bgcolor(b_color)
     t.color(what_color)
     t.shapesize(int(what_size))
@@ -57,6 +58,7 @@ timer_up = False
 #-----countdown turtle thing-----------
 counter = trtl.Turtle()
 counter.color("white")
+counter.penup()
 counter.goto(-50, 200)
 
 #-----countdown-----------
@@ -75,18 +77,21 @@ def countdown():
     counter.getscreen().ontimer(countdown, counter_interval)
 
 #-----events----------------
-countdown()
-while play == True:
-  t.onclick(score_for_circle)
-if score >= 48:
-  print("You scored " + str(score) + "!")
-  print("I award you a trophy for beating my high score")
-elif score >= 35:
-  print("You scored " + str(score) + "!")
-  print("You scored 35 or more! Congratulations, you win :)")
+if ask == "y":
+  countdown()
+  while play == True:
+    t.onclick(score_for_circle)
+  if score >= 48:
+    print("You scored " + str(score) + "!")
+    print("I award you a trophy for beating my high score")
+  elif score >= 35:
+    print("You scored " + str(score) + "!")
+    print("You scored 35 or more! Congratulations, you win :)")
+  else:
+    print("game over :(")
+    print("You scored " + str(score))
 else:
-  print("game over :(")
-  print("You scored " + str(score))
+  print("Alright, see ya")
 
 #-----finish----------------
 wn.mainloop()

@@ -1,0 +1,5 @@
+Rami,26
+asdf,15
+b,12
+Hasan,6
+tg,4

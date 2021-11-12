@@ -2,10 +2,16 @@
 #-----import statements-----
 import random as r
 import turtle as trtl
+import leaderboard as lb
 wn = trtl.Screen()
 t = trtl.Turtle()
 
 #-----game configuration----
+leaderboard_file_name = "a112_leaderboard.txt"
+leader_names_list = []
+leader_scores_list = []
+player_name = wn.textinput("Hello", "Please enter your name: ")
+
 wn.bgcolor("#1C1C1C")
 t.color("red")
 t.shape("circle")
@@ -21,7 +27,6 @@ score = 0
 play = True
 font_setup = ("Arial", 20, "normal")
 
-ask = wn.textinput("Welcome to Click-Game", "Would you like to play? (y/n)")
 #-----game functions--------
 def move():
     t.stamp()
@@ -48,6 +53,25 @@ def score_for_circle(x,y):
     trtl.clear()
     trtl.write("Score: " + str(score),font=font_setup)
     move()
+  
+def manage_leaderboard():
+  
+  global leader_scores_list
+  global leader_names_list
+  global leaderboard_file_name
+  global score
+  global t
+
+  # load all the leaderboard records into the lists
+  lb.load_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list)
+
+  if (len(leader_scores_list) < 5 or score > leader_scores_list[4]):
+    lb.update_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list, player_name, score)
+    lb.draw_leaderboard(leader_names_list, leader_scores_list, True, t, score)
+
+  else:
+    lb.draw_leaderboard(leader_names_list, leader_scores_list, False, t, score)
+
 
 #-----countdown variables-----
 font_setup = ("Arial", 20, "normal")
@@ -77,21 +101,10 @@ def countdown():
     counter.getscreen().ontimer(countdown, counter_interval)
 
 #-----events----------------
-if ask == "y":
-  countdown()
-  while play == True:
-    t.onclick(score_for_circle)
-  if score >= 48:
-    print("You scored " + str(score) + "!")
-    print("I award you a trophy for beating my high score")
-  elif score >= 35:
-    print("You scored " + str(score) + "!")
-    print("You scored 35 or more! Congratulations, you win :)")
-  else:
-    print("game over :(")
-    print("You scored " + str(score))
-else:
-  print("Alright, see ya")
-
+countdown()
+while play == True:
+  t.onclick(score_for_circle)
+  
 #-----finish----------------
+manage_leaderboard()
 wn.mainloop()
